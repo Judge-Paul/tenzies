@@ -1,14 +1,26 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 import Confetti from "react-confetti"
 import Die from "./Die"
 
 export default function App() {
-    const [dice, setDice] = React.useState(allNewDice())
-    const [tenzies, setTenzies] = React.useState(false)
-    const [tries, setTries] = React.useState(0)
-    const [highScore, setHighScore] = React.useState(100)
+    const [dice, setDice] = useState(allNewDice())
+    const [tenzies, setTenzies] = useState(false)
+    const [tries, setTries] = useState(0)
+    const [highScore, setHighScore] = useState(100)
+    const [seconds, setSeconds] = useState(0)
 
-    React.useEffect(() => {
+    let timer
+    useEffect(() => {
+        if (!tenzies) {
+            timer = setInterval(() => {
+                setSeconds(currSecond => currSecond + 1)
+            }, 1000)
+        }
+
+        return () => clearInterval(timer)
+    }, [tries, tenzies])
+
+    useEffect(() => {
         const firstValue = dice[0].value
         const allHeld = dice.every(die => die.held)
         const allSameNumber = dice.every(die => die.value === firstValue)
@@ -47,11 +59,12 @@ export default function App() {
             setDice(allNewDice())
             setTenzies(false)
             setTries(0)
+            setSeconds(0)
         }
     }
     function getHighScore() {
       let scoreToBeSet = highScore
-      tries <= highScore ? scoreToBeSet = tries : scoreToBeSet = highScore
+      seconds <= highScore ? scoreToBeSet = seconds : scoreToBeSet = highScore
       return scoreToBeSet
     }
 
@@ -71,8 +84,8 @@ export default function App() {
             {tenzies && <Confetti />}
             <h1>Tenzies</h1>
             {!tenzies && <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>}
-            {tenzies && <p>It took you {tries} rolls to complete the game do you want to go again.</p>}
-            {tenzies && <p>High Score: {highScore} rolls</p>}
+            {tenzies && <p>It took you {tries} rolls and {seconds} seconds to complete the game.</p>}
+            {tenzies && <p>High Score: {highScore} seconds</p>}
             <div className="die-container">{diceElements}</div>
             <button className="roll-dice" onClick={rollUnheldDice}>
                 {tenzies ? "Reset Game" : "Roll"}
