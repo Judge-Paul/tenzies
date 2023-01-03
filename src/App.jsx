@@ -26,7 +26,9 @@ export default function App() {
         const allSameNumber = dice.every(die => die.value === firstValue)
         if(allHeld && allSameNumber) {
             setTenzies(true)
-            setHighScore(getHighScore())
+            // setHighScore(getHighScore())
+            localStorage.setItem("highScore", JSON.stringify(getHighScore()))
+            setHighScore(JSON.parse(localStorage.getItem("highScore")))
         }
     }, [dice])
     
