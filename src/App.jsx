@@ -86,8 +86,8 @@ export default function App() {
             {tenzies && <Confetti />}
             <h1>Tenzies</h1>
             {!tenzies && <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>}
-            {tenzies && <p>It took you {tries} rolls and {seconds} seconds to complete the game.</p>}
-            {tenzies && <p>High Score: {highScore} seconds</p>}
+            {tenzies && <h3>It took you {tries} rolls and {seconds} seconds to complete the game.</h3>}
+            {tenzies && <h3>High Score: {highScore} seconds</h3>}
             <div className="die-container">{diceElements}</div>
             <button className="roll-dice" onClick={rollUnheldDice}>
                 {tenzies ? "Reset Game" : "Roll"}
